@@ -1,0 +1,14 @@
+services:
+  hello-backend:
+    build: ./hello-backend
+    container_name: hello-backend
+    ports:
+      - 3030:3030
+
+  hello-frontend:
+    build: ./hello-frontend
+    container_name: hello-frontend
+    ports:
+      - 3000:3000
+    links:
+      - hello-backend
