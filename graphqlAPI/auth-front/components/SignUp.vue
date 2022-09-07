@@ -4,7 +4,7 @@
       Fill In Your Details To Sign Up
     </h2>
     <RegNotification v-if="error" class="my-4 mx-4" :message="error" />
-    <form method="post" name="SignUpForm" @submit.prevent="register">
+    <form method="post" name="SignUpForm" @submit.prevent="userRegister">
       <div class="form-group mt-2">
         <label class="w-full text-center" for="email">Email</label>
         <input
@@ -61,37 +61,49 @@
   </div>
 </template>
 <script>
+import gql from 'graphql-tag'
 import RegNotification from '~/components/RegNotification'
 export default {
   name: 'SignUp',
   components: { RegNotification },
-  middleware: 'guest',
   data () {
     return {
       name: '',
       email: '',
       password: '',
+      token: '',
       error: null
     }
   },
-
   methods: {
-    async register () {
+    async userRegister () {
       try {
-        await this.$axios.post('register', {
-          Name: this.name,
-          Email: this.email,
-          password: this.password
-        })
-
-        await this.$auth.loginWith('local', {
-          data: {
-            Email: this.email,
-            password: this.password
+        await this.$apollo.mutate({
+          mutation: gql`
+          mutation (
+            $registerInput: RegisterInput
+          ) {
+            registerUser (
+              registerInput: $registerInput
+            ) {
+              token
+            }
+          }
+          `,
+          variables: {
+            registerInput: {
+              name: this.name,
+              email: this.email,
+              password: this.password
+            }
           }
         })
-
-        this.$router.push('/')
+          .then((response) => {
+          // save user token to localstorage
+            localStorage.setItem('user-token', response.data.login)
+            // redirect user
+            this.$router.replace('/dashboard')
+          })
       } catch (e) {
         this.error = e.response.data.message
       }

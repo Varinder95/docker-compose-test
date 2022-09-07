@@ -4,11 +4,10 @@ services:
     container_name: server
     ports:
       - 4000:4000
-
   auth-front:
     build: ./auth-front
-    container_name: auth-frontend
+    container_name: auth-front
     ports:
       - 3000:3000
-    links:
+    links: 
       - server

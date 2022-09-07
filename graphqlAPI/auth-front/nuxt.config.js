@@ -29,8 +29,17 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/apollo'
   ],
+
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'http://127.0.0.1:4000'
+      }
+    }
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -38,26 +47,11 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/auth
     '@nuxtjs/auth',
+    // https://go.nuxtjs.dev/apollo
+    '@nuxtjs/apollo',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa'
   ],
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    baseURL: 'http://127.0.0.1:4000/users'
-  },
-
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: { url: 'login', method: 'post', propertyName: false },
-          user: { url: 'current', method: 'get', propertyName: false },
-          logout: false
-        }
-      }
-    }
-  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
